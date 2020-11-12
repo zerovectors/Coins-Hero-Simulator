@@ -3,7 +3,7 @@ local hintmsg = Instance.new("Hint", game.CoreGui)
 local attempt = tick()
 hintmsg.Text = "Initializing UI Library This Can Take Up To 30 Seconds"
 local library = loadstring(game:HttpGet("https://raw.githubusercontent.com/zerovectors/framework/master/vect0rs%20hub%20framework%20uwuware%20checkmarks", true))()
-local version = "1"
+local version = "1.1"
 local uiname = "Coins Hero Simuwuator"
 local ui = { }
 local main = { }
@@ -193,6 +193,21 @@ do -- loops
             game:GetService("ReplicatedStorage").Remotes.Rank:InvokeServer()
         end
     end)
+    loopfunctions:RunLoop("Auto Upgrade Pets", function()
+        if library.flags.upgradepet then
+            pcall(function()
+                for i,v in pairs(game.Players.LocalPlayer.PlayerGui.Data.PetsRemote.Storage:GetChildren()) do
+                    local args = {
+                        [1] = "Upgrade",
+                        [2] = 1,
+                        [3] = game:GetService("Players")["vect0rss"].PlayerGui.Data:WaitForChild("PetsRemote").Storage[v.Name],
+                    }
+                    game:GetService("ReplicatedStorage").Remotes.PetManager:FireServer(unpack(args))
+                    wait(.4)
+                end
+            end)
+        end
+    end, Run.RenderStepped)
 end
 do -- main
     main.espsettings = {
@@ -1724,6 +1739,9 @@ do -- ui
             end})
             ui.pets.chosenegg = ui.pets.autoopeneggs:AddList({text = "Chosen Egg", flag = "chosenegg", values = main.sex, callback = function(a)
                 library.flags.chosenegg = a
+            end})
+            ui.pets.autupgradepet = ui.pets:AddToggle({text = "Auto Upgrade Pet", flag = "upgradepet", callback = function(a)
+                library.flags.upgradepet = a
             end})
         end
         do -- ui settings
