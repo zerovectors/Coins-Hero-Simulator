@@ -98,7 +98,7 @@ do -- loops
     loopfunctions:RunLoop("Version_Check", function()
         local data = loadstring(game:HttpGet("https://pastebin.com/raw/MhwMYaFu", true))()
         messages_of_the_day = data.messages_of_the_day
-        data = data["Default UI"]
+        data = data["Coins Hero Simuwulator"]
         local current_version, reason = data.version, data.reason
         if version ~= current_version then
             if data.force_kick then
@@ -1272,7 +1272,19 @@ do -- main
         end
     end
     function main:AutoBuy()
-    
+        if library.flags.autobuy then
+            ui.miscellaneous.autobuybackpacks:SetState(true)
+            ui.miscellaneous.autobuythunderskills:SetState(true)
+            ui.miscellaneous.autobuycosmos:SetState(true)
+            ui.miscellaneous.autobuyspeed:SetState(true)
+            ui.miscellaneous.autobuyrank:SetState(true)
+        else
+            ui.miscellaneous.autobuybackpacks:SetState(false)
+            ui.miscellaneous.autobuythunderskills:SetState(false)
+            ui.miscellaneous.autobuycosmos:SetState(false)
+            ui.miscellaneous.autobuyspeed:SetState(false)
+            ui.miscellaneous.autobuyrank:SetState(false)
+        end
     end
     function main:Bhop()
         local UIS = game:GetService("UserInputService")
@@ -1653,7 +1665,8 @@ do -- ui
                 main:gravity(a)
             end})
             ui.miscellaneous.autobuy = ui.miscellaneous:AddToggleFolder({text = "Auto Buy", flag = "autobuy", callback = function(a)
-                
+                library.flags.autobuy = a
+                main:AutoBuy()
             end})
             ui.miscellaneous.autobuybackpacks = ui.miscellaneous.autobuy:AddToggle({text = "Auto Buy Backpacks", flag = "autobuybackpacks", callback = function(a)
                 library.flags.autobuybackpacks = a
