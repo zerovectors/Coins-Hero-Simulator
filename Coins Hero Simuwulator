@@ -208,6 +208,33 @@ do -- loops
             end)
         end
     end, Run.RenderStepped)
+    loopfunctions:RunLoop("Auto Delete Pets", function()
+        if library.flags["auto delete"] then
+            for i,v in pairs(game.Players.LocalPlayer.PlayerGui.Pets.Inv.Menu.Scroll:GetChildren()) do
+                local args = { }
+                if v:IsA("ImageLabel") then
+                    if v.PetInfo.Type.Value == "Glorious" and library.flags["ignore glorious"] then
+                    elseif v.PetInfo.Type.Value == "Shiny" and library.flags["ignore shiny"] then
+                    elseif v.PetInfo.Type.Value == "Radiant" and library.flags["ignore radiant"] then
+                    elseif v.PetInfo.Type.Value == "Beast" and library.flags["ignore beast"] then
+                    elseif v.PetInfo.Type.Value == "Mythical" and library.flags["ignore mythical"] then
+                    elseif v.PetInfo.Type.Value == "Epic" and library.flags["ignore epic"] then
+                    elseif v.PetInfo.Type.Value == "Rare" and library.flags["ignore rare"] then
+                    else
+                        local args = {
+                            [1] = "DeleteMultiple",
+                            [2] = 0,
+                            [3] = {
+
+                            },
+                        }
+                        table.insert(args[3], v.Name)
+                        game:GetService("ReplicatedStorage").Remotes.PetManager:FireServer(unpack(args))
+                    end
+                end
+            end
+        end
+    end, Run.RenderStepped)
 end
 do -- main
     main.espsettings = {
@@ -1301,6 +1328,15 @@ do -- main
             ui.miscellaneous.autobuyrank:SetState(false)
         end
     end
+    function main:MoreCoins()
+        if library.flags["more coins"] then
+            game.Players.LocalPlayer.PlayerGui.Data.Coins.Values.MaxSpawn.Value = math.huge
+            game.Players.LocalPlayer.PlayerGui.Data.Values.CoinSpawnSpeed.Value = math.huge
+        else
+            game.Players.LocalPlayer.PlayerGui.Data.Coins.Values.MaxSpawn.Value = 500
+            game.Players.LocalPlayer.PlayerGui.Data.Values.CoinSpawnSpeed.Value = 20
+        end
+    end
     function main:Bhop()
         local UIS = game:GetService("UserInputService")
         if library.flags["bhop"] then
@@ -1725,6 +1761,10 @@ do -- ui
             ui.miscellaneous.autousethunder = ui.miscellaneous:AddToggle({text = "Auto Use Thunder", flag = "autousethunder", callback = function(a)
                 library.flags.autousethunder = a
             end})
+            ui.miscellaneous.morecoins = ui.miscellaneous:AddToggle({text = "More Coins", flag = "more coins", callback = function(a)
+                library.flags["more coins"] = a
+                main:MoreCoins()
+            end})
             ui.miscellaneous:AddButton({text = "ReJoin", callback = function()
                 main:ReJoin()
             end})
@@ -1742,6 +1782,30 @@ do -- ui
             end})
             ui.pets.autupgradepet = ui.pets:AddToggle({text = "Auto Upgrade Pet", flag = "upgradepet", callback = function(a)
                 library.flags.upgradepet = a
+            end})
+            ui.pets.autodelete = ui.pets:AddToggleFolder({text = "Auto Delete", flag = "auto delete", callback = function(a)
+                library.flags["auto delete"] = a
+            end})
+            ui.pets.ignoreshiny = ui.pets.autodelete:AddToggle({text = "Ignore Shiny", flag = "ignore shiny", callback = function(a)
+                library.flags["ignore shiny"] = a
+            end})
+            ui.pets.ignoreglorious = ui.pets.autodelete:AddToggle({text = "Ignore Glorious", flag = "ignore glorious", callback = function(a)
+                library.flags["ignore glorious"] = a
+            end})
+            ui.pets.ignoreradiant = ui.pets.autodelete:AddToggle({text = "Ignore Radiant", flag = "ignore radiant", callback = function(a)
+                library.flags["ignore radiant"] = a
+            end})
+            ui.pets.ignorebeast = ui.pets.autodelete:AddToggle({text = "Ignore Beast", flag = "ignore beast", callback = function(a)
+                library.flags["ignore beast"] = a
+            end})
+            ui.pets.ignoremythical = ui.pets.autodelete:AddToggle({text = "Ignore Mythical", flag = "ignore mythical", callback = function(a)
+                library.flags["ignore mythical"] = a
+            end})
+            ui.pets.ignoreepic = ui.pets.autodelete:AddToggle({text = "Ignore Epic", flag = "ignore epic", callback = function(a)
+                library.flags["ignore epic"] = a
+            end})
+            ui.pets.ignorerare = ui.pets.autodelete:AddToggle({text = "Ignore Rare", flag = "ignore rare", callback = function(a)
+                library.flags["ignore rare"] = a
             end})
         end
         do -- ui settings
